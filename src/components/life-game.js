@@ -11,6 +11,8 @@ class LifeGame extends Component {
       rows: null,
       generation: null,
     };
+
+    this.handleInputLifeCell = this.handleInputLifeCell.bind(this);
   }
 
   componentWillMount() {
@@ -104,6 +106,14 @@ class LifeGame extends Component {
     })
   }
 
+  handleInputLifeCell(cell) {
+    const coords = cell.split('-');
+    const newBoard = this.state.board;
+    newBoard[coords[0]][coords[1]] = 1;
+    this.setState({
+      board: newBoard
+    });
+  }
 
   render() {
     const { board, generation } = this.state;
@@ -113,6 +123,7 @@ class LifeGame extends Component {
         <h1 className="text-center">Comway's Game of Life</h1>
         <LifeBoard
           board={board}
+          onInputLifeCell={this.handleInputLifeCell}
         />
       </div>
     );

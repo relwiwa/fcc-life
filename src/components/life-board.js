@@ -3,7 +3,7 @@ import React from 'react';
 import LifeRow from './life-row';
 
 const LifeBoard = (props) => {
-  const { board } = props;
+  const { board, onInputLifeCell } = props;
 
   const renderRow = (row, index) => {
     return (
@@ -12,6 +12,7 @@ const LifeBoard = (props) => {
         key={'row-' + index}
         row={index}
         lifeData={row}
+        onInputLifeCell={onInputLifeCell}
       />
     );
   }

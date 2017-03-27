@@ -1,9 +1,9 @@
 import React from 'react';
 import { render } from 'react-dom';
-import App from './components/app';
+import LifeGame from './components/life-game';
 import styles from '../styles/style.scss';
 
 render(
-  <App />,
+  <LifeGame />,
   document.getElementById('root')
 );

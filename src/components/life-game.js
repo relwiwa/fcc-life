@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import LifeBoard from './life-board';
+import LifeControls from './life-controls';
 
 class LifeGame extends Component {
   constructor(props) {
@@ -10,36 +11,38 @@ class LifeGame extends Component {
       cols: null,
       rows: null,
       generation: null,
+      boardStatus: null,
     };
-
-    this.handleInputLifeCell = this.handleInputLifeCell.bind(this);
   }
+
+  // LIFECYCLE METHODS
 
   componentWillMount() {
     this.generateBoard(24, 36);
-    this.updateBoardInterval = setInterval(this.getNextGeneration.bind(this), 400);
-  }
-
-  componentDidMount() {
-    this.getNextGeneration();
+    this.setGenerationInterval();
   }
 
   componentWillUnmount() {
-    clearInterval(this.updateBoardInterval);
+    this.clearGenerationInterval();
   }
+
+  // METHODS FOR GENERATION INTERVAL MANAGEMENT
+
+  clearGenerationInterval() {
+    clearTimeout(this.generationInterval);
+  }
+
+  setGenerationInterval() {
+    this.generationInterval = setInterval(this.getNextGeneration.bind(this), 400);
+  }
+
+  // METHODS FOR BOARD HANDLING
 
   generateBoard(x, y) {
     const isLandscape = (window.innerHeight > window.innerWidth);
     const cols = (isLandscape ? x : y);
     const rows = (isLandscape ? y : x);
-    let board = new Array();
-    for (let i = 0; i < rows; i++) {
-      let row = new Array();
-      for (let j = 0; j < cols; j++) {
-        row[j] = Math.random() > 0.4 ? 1 : 0;
-      }
-      board.push(row);
-    }
+    let board = this.generateRandomBoard(cols, rows);
     // cols, rows could be calculated by board stored in two-dimensial array:
     // row: length of outer array
     // col: length of inner array
@@ -47,8 +50,22 @@ class LifeGame extends Component {
       board: board,
       cols: cols,
       rows: rows,
-      generation: 0
+      generation: 1,
+      gameStatus: 'started',
     });
+  }
+
+  generateRandomBoard(cols, rows) {
+    let board = new Array();
+    for (let i = 0; i < rows; i++) {
+      let row = new Array();
+      for (let j = 0; j < cols; j++) {
+        const cellStatus = Math.random() > 0.65 ? 1 : 0;
+        row[j] = cellStatus;
+      }
+      board.push(row);
+    }
+    return board;    
   }
 
   getNextGeneration() {
@@ -102,8 +119,17 @@ class LifeGame extends Component {
 
     this.setState({
       board: nextBoard,
-      generation: this.state.generation + 1
-    })
+      generation: this.state.generation + 1,
+    });
+  }
+
+  // METHODS FOR USER INTERACTION EVENT HANDLING
+
+  handleContinueGame() {
+    this.setState({
+      gameStatus: 'started',
+    });
+    this.setGenerationInterval();
   }
 
   handleInputLifeCell(cell) {
@@ -115,15 +141,69 @@ class LifeGame extends Component {
     });
   }
 
+  handlePauseGame() {
+    this.clearGenerationInterval();
+    this.setState({
+      gameStatus: 'paused'
+    });
+  }
+
+  handleResetGame() {
+    const { cols, rows } = this.state;
+    const newBoard = new Array();
+    for (let i = 0; i < rows; i++) {
+      let row = new Array();
+      for (let j = 0; j < cols; j++) {
+        row[j] = 0;
+      }
+      newBoard.push(row);
+    }
+    this.clearGenerationInterval();
+    this.setState({
+      board: newBoard,
+      generation: null,
+      gameStatus: 'stopped',
+    });
+  }
+
+  handleStartGame() {
+    this.setState({
+      gameStatus: 'started',
+    });
+    this.setGenerationInterval();
+  }
+
+  handleStartRandomGame() {
+    const { cols, rows } = this.state;
+    let board = this.generateRandomBoard(cols, rows);
+    this.setState({
+      board: board,
+      generation: 1,
+      gameStatus: 'random-setup',
+    });
+  }
+
+
+  // RENDER METHODS
+
   render() {
-    const { board, generation } = this.state;
+    const { board, gameStatus, generation } = this.state;
 
     return (
       <div className="life-game">
-        <h1 className="text-center">Comway's Game of Life</h1>
+        <h1 className="text-center mt-2">Life</h1>
+        <LifeControls
+          gameStatus={gameStatus}
+          generation={generation}
+          onContinueGame={() => this.handleContinueGame()}
+          onPauseGame={() => this.handlePauseGame()}
+          onResetGame={() => this.handleResetGame()}
+          onStartGame={() => this.handleStartGame()}
+          onStartRandomGame={() => this.handleStartRandomGame()}
+        />
         <LifeBoard
           board={board}
-          onInputLifeCell={this.handleInputLifeCell}
+          onInputLifeCell={(cell) => this.handleInputLifeCell(cell)}
         />
       </div>
     );

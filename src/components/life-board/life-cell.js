@@ -2,13 +2,11 @@ import React from 'react';
 import Styles from '../../../styles/style.scss';
 
 const LifeCell = (props) => {
-  const { cellId, onInputLifeCell, status } = props;
+  const { cellId, onToggleLifeCell, status } = props;
 
   const onClick = () => {
-    if (onInputLifeCell !== null) {
-      if (status !== 1) {
-        onInputLifeCell(cellId);
-      }
+    if (onToggleLifeCell !== null) {
+      onToggleLifeCell(cellId);
     }
   }
 

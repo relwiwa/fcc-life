@@ -87,10 +87,10 @@ class LifeGame extends Component {
     this.boardRef.startGenerationInterval();
   }
 
-  handleInputLifeCell(cell) {
+  handleToggleLifeCell(cell) {
     const coords = cell.split('-');
     const newBoard = this.state.board;
-    newBoard[coords[0]][coords[1]] = 1;
+    newBoard[coords[0]][coords[1]] = this.state.board[coords[0]][coords[1]] === 1 ? 0 : 1;
     this.setState({
       board: newBoard
     });
@@ -175,7 +175,7 @@ class LifeGame extends Component {
         <LifeBoard
           board={board}
           onNextGeneration={(nextGeneration) => this.handleNextGeneration(nextGeneration)}
-          onInputLifeCell={(cell) => this.handleInputLifeCell(cell)}
+          onToggleLifeCell={(cell) => this.handleToggleLifeCell(cell)}
           clusterSize={boardDimensions.clusterSize}
           ref={(boardRef) => {this.boardRef = boardRef}}
         />

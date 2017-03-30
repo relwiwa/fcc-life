@@ -87,21 +87,22 @@ class LifeBoard extends Component {
   }
 
   renderRow(row, index) {
+    const { clusterSize, onToggleLifeCell } = this.props;
     return (
       <LifeRow
         id={'row-' + index}
         key={'row-' + index}
         row={index}
-        clusterSize={this.props.clusterSize}
+        clusterSize={clusterSize}
         rowData={row}
-        onInputLifeCell={this.props.onInputLifeCell ? this.props.onInputLifeCell : null}
+        onToggleLifeCell={onToggleLifeCell ? onToggleLifeCell : null}
       />
     );
   }
 
 
   render() {
-    const { board, clusterSize, onInputLifeCell, onNextGeneration } = this.props;
+    const { board } = this.props;
 
     return (
       <div className="life-board">

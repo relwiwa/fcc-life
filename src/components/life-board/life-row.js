@@ -3,7 +3,7 @@ import React from 'react';
 import LifeCell from './life-cell';
 
 const LifeRow = (props) => {
-  const { clusterSize, rowData, onInputLifeCell, row } = props;
+  const { clusterSize, rowData, onToggleLifeCell, row } = props;
 
   const renderLifeRows = () => {
     const cols = rowData.length / clusterSize;
@@ -32,7 +32,7 @@ const LifeRow = (props) => {
           key={row + '-' + cell}
           cellId={row + '-' + cell}
           status={rowData[cell]}
-          onInputLifeCell={onInputLifeCell}
+          onToggleLifeCell={onToggleLifeCell}
         />
       );
     }

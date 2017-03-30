@@ -1,7 +1,13 @@
 import React, { Component } from 'react';
 
-import LifeBoard from './life-board';
+import LifeBoard from './life-board/life-board';
 import LifeControls from './life-controls';
+
+const boardDimensions = {
+  clusterSize: 5,
+  cols: 35,
+  rows: 25
+};
 
 class LifeGame extends Component {
   constructor(props) {
@@ -10,7 +16,7 @@ class LifeGame extends Component {
       board: null,
       cols: null,
       rows: null,
-      generation: null,
+      generationCount: null,
       boardStatus: null,
     };
   }
@@ -18,28 +24,17 @@ class LifeGame extends Component {
   // LIFECYCLE METHODS
 
   componentWillMount() {
-    this.generateBoard(24, 36);
-    this.setGenerationInterval();
+    this.generateBoard(boardDimensions.cols, boardDimensions.rows);
   }
 
   componentWillUnmount() {
-    this.clearGenerationInterval();
+    this.boardRef.stopGenerationInterval();
   }
 
-  // METHODS FOR GENERATION INTERVAL MANAGEMENT
-
-  clearGenerationInterval() {
-    clearTimeout(this.generationInterval);
-  }
-
-  setGenerationInterval() {
-    this.generationInterval = setInterval(this.getNextGeneration.bind(this), 400);
-  }
-
-  // METHODS FOR BOARD HANDLING
+  // METHODS FOR BOARD CREATION
 
   generateBoard(x, y) {
-    const isLandscape = (window.innerHeight > window.innerWidth);
+    const isLandscape = (window.innerHeight < window.innerWidth);
     const cols = (isLandscape ? x : y);
     const rows = (isLandscape ? y : x);
     let board = this.generateRandomBoard(cols, rows);
@@ -55,72 +50,29 @@ class LifeGame extends Component {
     });
   }
 
+  generateEmptyBoard(cols, rows) {
+    let newBoard = new Array();
+    for (let i = 0; i < rows; i++) {
+      let row = new Array();
+      for (let j = 0; j < cols; j++) {
+        row[j] = 0;
+      }
+      newBoard.push(row);
+    }
+    return newBoard;
+  }
+
   generateRandomBoard(cols, rows) {
-    let board = new Array();
+    let newBoard = new Array();
     for (let i = 0; i < rows; i++) {
       let row = new Array();
       for (let j = 0; j < cols; j++) {
         const cellStatus = Math.random() > 0.65 ? 1 : 0;
         row[j] = cellStatus;
       }
-      board.push(row);
+      newBoard.push(row);
     }
-    return board;    
-  }
-
-  getNextGeneration() {
-    const { cols, rows } = this.state;
-    let currentBoard = this.state.board;
-    let nextBoard = new Array();
-    
-    for (let currRow = 0; currRow < rows; currRow++) {
-      nextBoard[currRow] = new Array();
-      // handle limitations of board:
-      // - currRow === 0 means this is first row, so prevRow is last row of board
-      // - currRow === rows - 1 means this is last row, so nextRow is first row of board
-      const prevRow = (currRow === 0) ? rows - 1 : currRow - 1;
-      const nextRow = (currRow === rows - 1) ? 0 : currRow + 1;
-
-      for (let currCol = 0; currCol < cols; currCol++) {
-        // handle limitations of board as with rows
-        const prevCol = (currCol === 0) ? cols - 1 : currCol - 1;
-        const nextCol = (currCol === cols - 1) ? 0 : currCol + 1;
-
-        const sum = currentBoard[prevRow][prevCol]
-          + currentBoard[prevRow][currCol]
-          + currentBoard[prevRow][nextCol]
-          + currentBoard[currRow][prevCol]
-          + currentBoard[currRow][currCol]
-          + currentBoard[currRow][nextCol]
-          + currentBoard[nextRow][prevCol]
-          + currentBoard[nextRow][currCol]
-          + currentBoard[nextRow][nextCol];
-
-        // Determination of value of central field:
-        // "To avoid decisions and branches in the counting loop, the rules can be
-        //  rearranged from an egocentric approach of the inner field regarding its
-        //  neighbours to a scientific observer's viewpoint: if the sum of all nine
-        //  fields is 3, the inner field state for the next generation will be life
-        //  (no matter of its previous contents); if the all-field sum is 4, the inner
-        //  field retains its current state and every other sum sets the inner field
-        //  to death."
-        // from Wikipedia: https://en.wikipedia.org/wiki/Conway's_Game_of_Life#Algorithms
-        if (sum === 3) {
-          nextBoard[currRow][currCol] = 1;
-        }
-        else if (sum === 4) {
-          nextBoard[currRow][currCol] = currentBoard[currRow][currCol];
-        }
-        else {
-          nextBoard[currRow][currCol] = 0;
-        }
-      }
-    }
-
-    this.setState({
-      board: nextBoard,
-      generation: this.state.generation + 1,
-    });
+    return newBoard;    
   }
 
   // METHODS FOR USER INTERACTION EVENT HANDLING
@@ -129,7 +81,7 @@ class LifeGame extends Component {
     this.setState({
       gameStatus: 'started',
     });
-    this.setGenerationInterval();
+    this.boardRef.startGenerationInterval();
   }
 
   handleInputLifeCell(cell) {
@@ -141,8 +93,15 @@ class LifeGame extends Component {
     });
   }
 
+  handleNextGeneration(nextGeneration) {
+    this.setState({
+      board: nextGeneration,
+      generation: this.state.generation + 1
+    });
+  }
+
   handlePauseGame() {
-    this.clearGenerationInterval();
+    this.boardRef.stopGenerationInterval();
     this.setState({
       gameStatus: 'paused'
     });
@@ -150,15 +109,8 @@ class LifeGame extends Component {
 
   handleResetGame() {
     const { cols, rows } = this.state;
-    const newBoard = new Array();
-    for (let i = 0; i < rows; i++) {
-      let row = new Array();
-      for (let j = 0; j < cols; j++) {
-        row[j] = 0;
-      }
-      newBoard.push(row);
-    }
-    this.clearGenerationInterval();
+    const newBoard = this.generateEmptyBoard(cols, rows);
+    this.boardRef.stopGenerationInterval();
     this.setState({
       board: newBoard,
       generation: null,
@@ -170,7 +122,7 @@ class LifeGame extends Component {
     this.setState({
       gameStatus: 'started',
     });
-    this.setGenerationInterval();
+    this.boardRef.startGenerationInterval();
   }
 
   handleStartRandomGame() {
@@ -182,7 +134,6 @@ class LifeGame extends Component {
       gameStatus: 'random-setup',
     });
   }
-
 
   // RENDER METHODS
 
@@ -203,7 +154,10 @@ class LifeGame extends Component {
         />
         <LifeBoard
           board={board}
+          onNextGeneration={(nextGeneration) => this.handleNextGeneration(nextGeneration)}
           onInputLifeCell={(cell) => this.handleInputLifeCell(cell)}
+          clusterSize={boardDimensions.clusterSize}
+          ref={(boardRef) => {this.boardRef = boardRef}}
         />
       </div>
     );

@@ -3,13 +3,13 @@ import React from 'react';
 import LifeCell from './life-cell';
 
 const LifeRow = (props) => {
-  const { lifeData, onInputLifeCell, row } = props;
+  const { clusterSize, rowData, onInputLifeCell, row } = props;
 
   const renderLifeRows = () => {
-    const cols = lifeData.length / 6;
+    const cols = rowData.length / clusterSize;
     let result = [];
     for (let col = 0; col < cols; col++) {
-      const cellIndex = col * 6;
+      const cellIndex = col * clusterSize;
       result.push(
         <div
           key={'row-' + row + '-col-' + col}
@@ -26,12 +26,12 @@ const LifeRow = (props) => {
 
   const renderLifeCells = (cellIndex)  => {
     let results = [];
-    for (let cell = cellIndex; cell < cellIndex + 6; cell++) {
+    for (let cell = cellIndex; cell < cellIndex + clusterSize; cell++) {
       results.push(
         <LifeCell
           key={row + '-' + cell}
           cellId={row + '-' + cell}
-          status={lifeData[cell]}
+          status={rowData[cell]}
           onInputLifeCell={onInputLifeCell}
         />
       );

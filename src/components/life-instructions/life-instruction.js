@@ -7,7 +7,6 @@ const LifeInstruction = (props) => {
 
   return (
     <div className="col-12 col-sm-6 col-lg-3">
-      <h4 className="card-title">{instruction.headline}</h4>
       <div className="row">
         <div className="col-4 offset-4 col-sm-6 offset-sm-3">
           <LifeBoard
@@ -16,6 +15,7 @@ const LifeInstruction = (props) => {
           />
         </div>
       </div>
+      <h5 className="card-title my-4">{instruction.headline}</h5>
       <p className="card-text my-2">{instruction.explanation}</p>
     </div>
   );

@@ -9,6 +9,7 @@ const LifeInstructionsContent = (props) => {
   const renderInstructions = (instruction) => {
     return (
       <div className="card-block row">
+        <h4 className="col-12 card-title mb-4">Conway's Game of Life: {instruction[0].toUpperCase() + instruction.substr(1)}</h4>
         {Object.keys(instructionsData[instruction]).map((key) => (
           <LifeInstruction
             key={key}

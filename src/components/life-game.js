@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import LifeBoard from './life-board/life-board';
 import LifeControls from './life-controls';
+import LifeInstructions from './life-instructions/life-instructions';
 
 const boardDimensions = {
   clusterSize: 5,
@@ -18,6 +19,7 @@ class LifeGame extends Component {
       rows: null,
       generationCount: null,
       boardStatus: null,
+      instructionsDisplayed: true,
     };
   }
 
@@ -77,6 +79,7 @@ class LifeGame extends Component {
 
   // METHODS FOR USER INTERACTION EVENT HANDLING
 
+
   handleContinueGame() {
     this.setState({
       gameStatus: 'started',
@@ -135,6 +138,12 @@ class LifeGame extends Component {
     });
   }
 
+  handleToggleInstructionsDisplay() {
+    this.setState({
+      instructionsDisplayed: !this.state.instructionsDisplayed
+    });
+  }
+
   // RENDER METHODS
 
   render() {
@@ -142,7 +151,18 @@ class LifeGame extends Component {
 
     return (
       <div className="life-game">
-        <h1 className="text-center mt-2">Life</h1>
+        <h1 className="text-center mt-2">
+          Life&nbsp;
+          <i
+            className="fa fa-question-circle-o text-muted"
+            onClick={() => this.handleToggleInstructionsDisplay()}
+          ></i>
+        </h1>
+        {this.state.instructionsDisplayed &&
+          <LifeInstructions
+            onToggleInstructionsDisplay={() => this.handleToggleInstructionsDisplay()}
+          />
+        }
         <LifeControls
           gameStatus={gameStatus}
           generation={generation}

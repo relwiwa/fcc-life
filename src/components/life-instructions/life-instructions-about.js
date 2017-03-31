@@ -11,7 +11,7 @@ const LifeInstructionsAbout = (props) => {
           <p className="card-text">Conways's Game of Life is a cellular automaton devised by the British mathematician John Horton Conway in 1970</p>
           <p className="card-text">The automaton is determined by its initial configuration and requires no further input</p>
           <p className="card-text">It follows <a href="#" onClick={((event) => onChangeActiveInstruction(event, 'rules'))}>a set of rules</a> defining how cells live on, die and get reborn from generation to generation</p>
-          <p className="card-text">During its evolution, certain <a href="#" onClick={((event) => onChangeActiveInstruction(event, 'patterns'))}>patterns emerge</a>, containing, still lives, oscillators and others</p>
+          <p className="card-text">During its evolution, certain <a href="#" onClick={((event) => onChangeActiveInstruction(event, 'patterns'))}>patterns emerge</a>. These include still lives, oscillators and others</p>
         </div>
         <div className="col-12 col-sm-6 mt-3 mt-sm-0">
           <p className="card-text">In this implementation you can:</p>

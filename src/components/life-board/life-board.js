@@ -10,7 +10,7 @@ class LifeBoard extends Component {
  // LIFECYCLE METHODS
 
   componentWillMount() {
-    if (this.props.onNextGeneration) {
+    if (this.props.onNextBoard) {
       this.startGenerationInterval();
     }
   }
@@ -35,9 +35,10 @@ class LifeBoard extends Component {
   // and returns it to parent component
   // => controlled component
   getNextGeneration() {
-    const cols = this.props.board[0].length;
-    const rows = this.props.board.length;
-    let currentBoard = this.props.board;
+    const { board, onNextBoard } = this.props;
+    const cols = board[0].length;
+    const rows = board.length;
+    let currentBoard = board;
     let nextBoard = new Array();
     
     for (let currRow = 0; currRow < rows; currRow++) {
@@ -83,7 +84,7 @@ class LifeBoard extends Component {
         }
       }
     }
-    this.props.onNextGeneration(nextBoard);
+    onNextBoard(nextBoard);
   }
 
   renderRow(row, index) {

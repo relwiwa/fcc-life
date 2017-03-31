@@ -81,7 +81,8 @@ const instructionsData = {
         [0,0,1,0,0],
         [0,0,0,0,0],
       ],
-      clusterSize: 5
+      clusterSize: 5,
+      oscillator: 'blinker'    
     },
     toad: {
       headline: 'Toad Oscillator',
@@ -93,7 +94,8 @@ const instructionsData = {
         [0,0,0,0,0,0],
         [0,0,0,0,0,0]
       ],
-      clusterSize: 6
+      clusterSize: 6,
+      oscillator: 'toad'
     },
   }
 };

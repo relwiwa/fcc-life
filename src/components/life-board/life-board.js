@@ -16,7 +16,7 @@ class LifeBoard extends Component {
   }
 
   componentWillUnmount() {
-    if (this.props.onNextGeneration) {
+    if (this.props.onNextBoard) {
       this.stopGenerationInterval();
     }
   }

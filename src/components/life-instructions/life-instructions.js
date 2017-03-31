@@ -9,6 +9,8 @@ class LifeInstructions extends Component {
     super(props);
     this.state = {
       activeInstruction: null,
+      toadBoard: null,
+      blinkerBoard: null,
     };
 
   }
@@ -16,6 +18,8 @@ class LifeInstructions extends Component {
   componentWillMount() {
     this.setState({
       activeInstruction: 'about',
+      toadBoard: instructionsData.patterns.toad.board,
+      blinkerBoard: instructionsData.patterns.blinker.board,
     });
   }
 
@@ -23,14 +27,20 @@ class LifeInstructions extends Component {
     event.preventDefault();
     if (this.state.activeInstruction !== instruction) {
       this.setState({
-        activeInstruction: instruction
+        activeInstruction: instruction,
       });
     }
   }
 
+  handleNextBoard(nextBoard, oscillatorName) {
+    const nextState = {};
+    nextState[oscillatorName + 'Board'] = nextBoard;
+    this.setState(nextState);
+  }
+
   render() {
     const { onToggleInstructionsDisplay } = this.props;
-
+    const { blinkerBoard, toadBoard } = this.state;
     return (
       <div className="life-instructions">
         <div className="card text-center">
@@ -43,6 +53,9 @@ class LifeInstructions extends Component {
             activeInstruction={this.state.activeInstruction}
             instructionsData={instructionsData}
             onChangeActiveInstruction={(event, instruction) => this.handleChangeActiveInstruction(event, instruction)}
+            blinkerBoard={blinkerBoard}
+            toadBoard={toadBoard}
+            onNextBoard={(nextBoard, oscillatorName) => this.handleNextBoard(nextBoard, oscillatorName)}
           />
           <div className="card-footer">
             <div className="card-text text-right">

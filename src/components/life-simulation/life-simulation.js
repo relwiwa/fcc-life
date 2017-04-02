@@ -4,9 +4,16 @@ import LifeBoard from '../life-board/life-board';
 import LifeControls from './life-controls';
 
 const boardDimensions = {
-  clusterSize: 5,
-  cols: 35,
-  rows: 25
+  large: {
+    clusterSize: 5,
+    cols: 35,
+    rows: 25
+  },
+  small: {
+    clusterSize: 5,
+    cols: 25,
+    rows: 15
+  }
 };
 
 class LifeSimulation extends Component {
@@ -14,38 +21,42 @@ class LifeSimulation extends Component {
     super(props);
     this.state = {
       board: null,
+      boardStatus: null,
+      clusterSize: null,
       generation: null,
       population: null,
-      boardStatus: null,
     };
+
+    this.handleResize = this.handleResize.bind(this);
   }
 
   // LIFECYCLE METHODS
 
   componentWillMount() {
-    this.generateBoard(boardDimensions.cols, boardDimensions.rows);
+    this.setupBoard();
+  }
+
+  componentDidMount() {
+    window.addEventListener('resize', this.handleResize);
   }
 
   componentWillUnmount() {
     this.boardRef.stopGenerationInterval();
+    window.removeEventListener('resize', this.handleResize);
   }
 
   // METHODS FOR BOARD CREATION
 
-  generateBoard(x, y) {
-    const isLandscape = (window.innerHeight < window.innerWidth);
-    const cols = (isLandscape ? x : y);
-    const rows = (isLandscape ? y : x);
-    let boardAndPopulation = this.generateRandomBoard(cols, rows);
-    // cols, rows could be calculated by board stored in two-dimensial array:
-    // row: length of outer array
-    // col: length of inner array
-    this.setState({
-      board: boardAndPopulation.board,
-      population: boardAndPopulation.population,
-      generation: 1,
-      gameStatus: 'started',
-    });
+  handleResize() {
+    const currDimensions = this.getCurrentDimensions();
+    if (currDimensions.cols !== this.state.board[0].length) {
+      if (this.state.gameStatus === 'started') {
+        this.setupBoard();
+      }
+      else {
+        this.handleSetupRandomGame();
+      }
+    } 
   }
 
   generateEmptyBoard(cols, rows) {
@@ -76,6 +87,36 @@ class LifeSimulation extends Component {
       board: newBoard,
       population: populationCount
     };    
+  }
+
+  getCurrentDimensions() {
+    let currDimensions = {};
+    let dimension;
+    const isLandscape = (window.innerHeight < window.innerWidth);
+    if (isLandscape) {
+      dimension = window.innerWidth < 600 ? 'small' : 'large';
+      currDimensions.cols = boardDimensions[dimension].cols;
+      currDimensions.rows = boardDimensions[dimension].rows;
+    }
+    else {
+      dimension = window.innerWidth < 500 ? 'small' : 'large'; 
+      currDimensions.cols = boardDimensions[dimension].rows;
+      currDimensions.rows = boardDimensions[dimension].cols;
+    }
+    currDimensions.clusterSize = boardDimensions[dimension].clusterSize;
+    return currDimensions;
+  }
+
+  setupBoard() {
+    const currDimensions = this.getCurrentDimensions();
+    let boardAndPopulation = this.generateRandomBoard(currDimensions.cols, currDimensions.rows);
+    this.setState({
+      board: boardAndPopulation.board,
+      population: boardAndPopulation.population,
+      clusterSize: currDimensions.clusterSize,
+      generation: 1,
+      gameStatus: 'started',
+    });
   }
 
   // METHODS FOR USER INTERACTION EVENT HANDLING
@@ -113,16 +154,27 @@ class LifeSimulation extends Component {
   }
 
   handleResetGame() {
-    const { board }  = this.state;
-    const cols = this.state.board[0].length;
-    const rows = this.state.board.length;
-    const newBoard = this.generateEmptyBoard(cols, rows);
+    const currDimensions = this.getCurrentDimensions();
+    const newBoard = this.generateEmptyBoard(currDimensions.cols, currDimensions.rows);
     this.boardRef.stopGenerationInterval();
     this.setState({
       board: newBoard,
-      population: 0,
-      generation: null,
+      clusterSize: currDimensions.clusterSize,
       gameStatus: 'stopped',
+      generation: null,
+      population: 0,
+    });
+  }
+
+  handleSetupRandomGame() {
+    const currDimensions = this.getCurrentDimensions();
+    let boardAndPopulation = this.generateRandomBoard(currDimensions.cols, currDimensions.rows);
+    this.setState({
+      board: boardAndPopulation.board,
+      population: boardAndPopulation.population,
+      clusterSize: currDimensions.clusterSize,
+      generation: 1,
+      gameStatus: 'random-setup',
     });
   }
 
@@ -134,18 +186,6 @@ class LifeSimulation extends Component {
       });
       this.boardRef.startGenerationInterval();
     }
-  }
-
-  handleStartRandomGame() {
-    const cols = this.state.board[0].length;
-    const rows = this.state.board.length;
-    let boardAndPopulation = this.generateRandomBoard(cols, rows);
-    this.setState({
-      board: boardAndPopulation.board,
-      population: boardAndPopulation.population,
-      generation: 1,
-      gameStatus: 'random-setup',
-    });
   }
 
   handleToggleLifeCell(cell) {
@@ -168,7 +208,7 @@ class LifeSimulation extends Component {
   }
 
   render() {
-    const { board, gameStatus, generation, population } = this.state;
+    const { board, clusterSize, gameStatus, generation, population } = this.state;
     const { instructionsDisplayed, onToggleInstructionsDisplay } = this.props;
 
     return (
@@ -182,14 +222,14 @@ class LifeSimulation extends Component {
           onPauseGame={() => this.handlePauseGame()}
           onResetGame={() => this.handleResetGame()}
           onStartGame={() => this.handleStartGame()}
-          onStartRandomGame={() => this.handleStartRandomGame()}
+          onSetupRandomGame={() => this.handleSetupRandomGame()}
           onToggleInstructionsDisplay={onToggleInstructionsDisplay}
         />
         <LifeBoard
           board={board}
           onNextBoard={(nextBoard, populationCount) => this.handleNextBoard(nextBoard, populationCount)}
           onToggleLifeCell={(cell) => this.handleToggleLifeCell(cell)}
-          clusterSize={boardDimensions.clusterSize}
+          clusterSize={clusterSize}
           ref={(boardRef) => {this.boardRef = boardRef}}
         />
       </div>

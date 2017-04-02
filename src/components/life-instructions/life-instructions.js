@@ -42,7 +42,7 @@ class LifeInstructions extends Component {
     const { onToggleInstructionsDisplay } = this.props;
     const { blinkerBoard, toadBoard } = this.state;
     return (
-      <div className="life-instructions">
+      <div className="life-instructions mb-3">
         <div className="card text-center">
           <LifeInstructionsNav
             activeInstruction={this.state.activeInstruction}

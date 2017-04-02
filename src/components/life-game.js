@@ -7,7 +7,7 @@ class LifeGame extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      instructionsDisplayed: true,
+      instructionsDisplayed: false,
     };
   }
 
@@ -36,7 +36,10 @@ class LifeGame extends Component {
             onToggleInstructionsDisplay={() => this.handleToggleInstructionsDisplay()}
           />
         }
-        <LifeSimulation />
+        <LifeSimulation
+          instructionsDisplayed={instructionsDisplayed}
+          onToggleInstructionsDisplay={() => this.handleToggleInstructionsDisplay()}          
+        />
       </div>
     );
   }

@@ -18,8 +18,8 @@ const LifeInstructionsAbout = (props) => {
           <ul className="card-text">
             <li>Watch how random boards evolve</li>
             <li>Create your own configuration and see how it evolves</li>
-            <li>Manipulation is possible by clicking on the cell you want to add or remove from the board</li>
-            <li>You can pause, manipulate, reset and continue the game at any time</li>
+            {/*<li>Manipulation is possible by clicking on the cell you want to add or remove from the board</li>*/}
+            <li>You can pause, {/*manipulate, */}reset and continue the game at any time</li>
           </ul>
         </div>
       </div>

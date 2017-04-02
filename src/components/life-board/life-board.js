@@ -40,6 +40,7 @@ class LifeBoard extends Component {
     const rows = board.length;
     let currentBoard = board;
     let nextBoard = new Array();
+    let populationCount = 0;
     
     for (let currRow = 0; currRow < rows; currRow++) {
       nextBoard[currRow] = new Array();
@@ -82,9 +83,10 @@ class LifeBoard extends Component {
         else {
           nextBoard[currRow][currCol] = 0;
         }
+        populationCount += nextBoard[currRow][currCol];
       }
     }
-    onNextBoard(nextBoard);
+    onNextBoard(nextBoard, populationCount);
   }
 
   renderRow(row, index) {

@@ -15,20 +15,24 @@ const config = {
   },
   output: {
     path: path.resolve(__dirname, 'build'),
-    filename: '[name].[chunkhash].js'
+    filename: '[name].[chunkhash].js',
+    publicPath: './'
   },
   module: {
     rules: [
       {
         use: 'babel-loader',
         test: /\.js$/,
-        exclude: /node_modules/
+        include: [
+          path.resolve(__dirname, 'src'),
+          path.resolve(__dirname, 'node_modules/foundation-sites/js')
+        ]
       },
       {
         loader: ExtractTextPlugin.extract({
           use: ['css-loader', 'sass-loader']
         }),
-        test: /\.scss$/
+        test: /\.s?css$/
       },
       {
         use: [
@@ -43,17 +47,12 @@ const config = {
     ]
   },
   plugins: [
-    new ExtractTextPlugin('style.css'),
+    new ExtractTextPlugin({ filename: '[name].[chunkhash].css', allChunks: true }),
     new webpack.optimize.CommonsChunkPlugin({
       names: ['vendor', 'manifest']
     }),
     new HtmlWebpackPlugin({
       template: './index.html'
-    }),
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify('production')
-      }
     })
   ]
 };

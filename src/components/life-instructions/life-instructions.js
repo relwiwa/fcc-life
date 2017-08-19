@@ -1,35 +1,34 @@
 import React, { Component } from 'react';
 
+import LifeInstruction from './life-instruction';
+import TabsContainer from '../../reusable-components/tabs-container/tabs-container';
+
 import instructionsData from './life-instructions-data';
-import LifeInstructionsContent from './life-instructions-content';
-import LifeInstructionsNav from './life-instructions-nav';
 
 class LifeInstructions extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      activeInstruction: null,
-      toadBoard: null,
+      activeInstruction: 0,
       blinkerBoard: null,
+      toadBoard: null,
     };
 
+    this.handleChangeActiveInstruction = this.handleChangeActiveInstruction.bind(this);
   }
 
   componentWillMount() {
     this.setState({
-      activeInstruction: 'about',
-      toadBoard: instructionsData.patterns.toad.board,
-      blinkerBoard: instructionsData.patterns.blinker.board,
+      toadBoard: instructionsData[2].boardSpecs.toad.board,
+      blinkerBoard: instructionsData[2].boardSpecs.blinker.board,
     });
   }
 
-  handleChangeActiveInstruction(event, instruction) {
-    event.preventDefault();
-    if (this.state.activeInstruction !== instruction) {
-      this.setState({
-        activeInstruction: instruction,
-      });
-    }
+  handleChangeActiveInstruction(tabIndex) {
+    this.setState({
+      activeInstruction: tabIndex,
+    });
   }
 
   handleNextBoard(nextBoard, oscillatorName) {
@@ -40,35 +39,71 @@ class LifeInstructions extends Component {
 
   render() {
     const { onToggleInstructionsDisplay } = this.props;
-    const { blinkerBoard, toadBoard } = this.state;
+    const { activeInstruction, blinkerBoard, toadBoard } = this.state;
+
     return (
-      <div className="life-instructions mb-3">
-        <div className="card text-center">
-          <LifeInstructionsNav
-            activeInstruction={this.state.activeInstruction}
-            navItems={Object.keys(instructionsData)}
-            onChangeActiveInstruction={(event, instruction) => this.handleChangeActiveInstruction(event, instruction)}
-          />
-          <LifeInstructionsContent
-            activeInstruction={this.state.activeInstruction}
-            instructionsData={instructionsData}
-            onChangeActiveInstruction={(event, instruction) => this.handleChangeActiveInstruction(event, instruction)}
-            blinkerBoard={blinkerBoard}
-            toadBoard={toadBoard}
-            onNextBoard={(nextBoard, oscillatorName) => this.handleNextBoard(nextBoard, oscillatorName)}
-          />
-          <div className="card-footer">
-            <div className="card-text text-right">
-              <a
-                href="#"
-                className="card-link"
-                onClick={() => onToggleInstructionsDisplay()}
-              >
-                Close
-              </a>
+      <div className="life-instructions">
+        <TabsContainer
+          tabs={instructionsData.map(instructionDatum => {
+            return instructionDatum.title
+          })}
+          activeTab={activeInstruction}
+          onChangeActiveTab={this.handleChangeActiveInstruction}
+          onToggleTabsContainer={onToggleInstructionsDisplay}
+        >
+          <div>
+            <h3 className="text-center">Conway's Game of Life</h3>
+            <div className="grid-x grid-padding-x">
+              <div className="cell medium-6">
+                <p>Conways's Game of Life is a cellular automaton devised by the British mathematician John Horton Conway in 1970</p>
+                <p>The player who succeeds in placing three of their marks in a horizontal, vertical, or diagonal row wins the game.</p>
+                <p>It follows <a onClick={() => this.handleChangeActiveInstruction(1)}>a set of rules</a> defining how cells live on, die and get reborn from generation to generation</p>
+                <p>During its evolution, certain <a onClick={() => this.handleChangeActiveInstruction(2)}>patterns emerge</a>. These include still lives, oscillators and others</p>
+              </div>
+              <div className="cell medium-6">
+                <p>In this implementation you can:</p>
+                <ul>
+                  <li>Watch how random boards evolve</li>
+                  <li>Create your own configuration and see how it evolves</li>
+                  {/*<li>Manipulation is possible by clicking on the cell you want to add or remove from the board</li>*/}
+                  <li>You can pause, {/*manipulate, */}reset and continue the game at any time</li>
+                </ul>
+              </div>
             </div>
           </div>
-      </div>
+          <div>
+            <h3 className="text-center">Conway's Game of Life: Rules</h3>
+            <div className="grid-x grid-padding-x">
+              {Object.keys(instructionsData[1].boardSpecs).map((key) => (
+                <LifeInstruction
+                  key={key}
+                  board={this.props[key + 'Board']}
+                  onNextBoard={(nextBoard) => this.handleNextBoard(nextBoard, key)}
+                  instruction={instructionsData[1].boardSpecs[key]}
+                />
+              ))}
+            </div>
+          </div>
+          <div>
+            <h3 className="text-center">Conway's Game of Life: Patterns</h3>
+            <div className="grid-x grid-padding-x">
+              {Object.keys(instructionsData[2].boardSpecs).map((key) => (
+                ((instructionsData[2].boardSpecs[key].oscillator === undefined)
+                ? <LifeInstruction
+                    key={key}
+                    instruction={instructionsData[2].boardSpecs[key]}
+                  />
+                : <LifeInstruction
+                    key={key}
+                    board={this.state[key + 'Board']}
+                    onNextBoard={(nextBoard) => this.handleNextBoard(nextBoard, key)}
+                    instruction={instructionsData[2].boardSpecs[key]}
+                  />
+                )
+              ))}
+            </div>
+          </div>
+       </TabsContainer>
     </div>
     );
   }

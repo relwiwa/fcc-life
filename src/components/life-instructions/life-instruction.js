@@ -27,14 +27,16 @@ const LifeInstruction = (props) => {
   }
 
   return (
-    <div className="col-12 col-sm-6 col-lg-3">
-      <div className="row">
-        <div className="col-4 offset-4 col-sm-6 offset-sm-3">
+    <div className="cell medium-6 large-3">
+      <div className="grid-x grid-padding-y align-center">
+        <div className="align-self-center cell small-4 medium-5 medium-offset-0 large-5">
           {instruction.oscillator ? renderOscillator() : renderStillLife() }
         </div>
+        <div className="cell text-center">
+          <h5>{instruction.headline}</h5>
+          <p>{instruction.explanation}</p>
+        </div>
       </div>
-      <h5 className="card-title my-4">{instruction.headline}</h5>
-      <p className="card-text my-2">{instruction.explanation}</p>
     </div>
   );
 }

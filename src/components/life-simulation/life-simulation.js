@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import LifeBoard from '../life-board/life-board';
 import LifeControls from './life-controls';
 
+import '../../styles/life-simulation.scss';
+
 const boardDimensions = {
   large: {
     clusterSize: 5,
@@ -212,7 +214,7 @@ class LifeSimulation extends Component {
     const { instructionsDisplayed, onToggleInstructionsDisplay } = this.props;
 
     return (
-      <div className="life-simulation mb-3">
+      <div className="life-simulation">
         <LifeControls
           gameStatus={gameStatus}
           generation={generation}

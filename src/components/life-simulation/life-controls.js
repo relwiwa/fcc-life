@@ -5,9 +5,9 @@ const LifeControls = (props) => {
 
   const renderStatusMessage = () => {
     return (
-      <div className="col-12 col-sm-10 offset-sm-1 offset-lg-0 col-lg-6 text-center">
+      <div className="cell small-10 large-6 small-offset-1 large-offset-0 text-center">
         {gameStatus === 'started' && <p>
-          Watch the population evolve from generation to generation or <a href="#" onClick={onResetGame}>setup your own population</a>{instructionsDisplayed === false && <span>. Plus, there are <a href="#" onClick={onToggleInstructionsDisplay}>instructions</a> to learn what's going on</span>}
+          Watch the population evolve from generation to generation or <a href="#" onClick={onResetGame}>setup your own population</a>{instructionsDisplayed === false && <span>. There are also <a href="#" onClick={onToggleInstructionsDisplay}>instructions</a> to learn what's happening</span>}
         </p>}
         {(gameStatus === 'paused') && <p>
           <a href="#" onClick={onContinueGame}>Continue simulation</a> or <a href="#" onClick={onResetGame}>setup a new population</a>
@@ -24,38 +24,38 @@ const LifeControls = (props) => {
 
   const renderControlButtons = () => {
     return (
-     <div className="col-12 col-lg-3 text-center text-lg-right">
+     <div className="cell large-3 align-center button-group small">
         {gameStatus === 'started' &&
           <button
-              className="btn btn-sm btn-primary mr-3"
+              className="button"
               onClick={onPauseGame}
             >Pause</button>}
         {gameStatus === 'paused' &&
           <button
-            className="btn btn-sm btn-primary mr-3"
+            className="button"
             onClick={onContinueGame}
           >Continue</button>}
         {(gameStatus === 'stopped' || gameStatus === 'random-setup' || gameStatus === 'all-dead') &&
           <button
-            className={'btn btn-sm btn-primary mr-3' + (population === 0 ? ' disabled' : '')}
-            onClick={onStartGame}
+            className={'button' + (population === 0 ? ' disabled' : '')}
+            onClick={population === 0 ? null : onStartGame}
             >Start</button>}
         {(gameStatus === 'stopped' || gameStatus === 'random-setup' || gameStatus === 'all-dead') &&
           <button
-            className="btn btn-sm btn-primary mr-3"
+            className="button"
             onClick={onSetupRandomGame}
             >Random</button>}
         <button
-            className={'btn btn-sm btn-primary' + (population === 0 ? ' disabled' : '')}
-            onClick={onResetGame}
+            className={'button' + (population === 0 ? ' disabled' : '')}
+            onClick={population === 0 ? null : onResetGame}
           >Reset</button>
       </div>
     );
   };
 
   return (
-    <div className="life-controls no-gutters row align-items-center my-3 mb-lg-2">
-      <h4 className="col-12 col-lg-3 text-center text-lg-left mt-lg-1">
+    <div className="life-controls grid-x grid-padding-x align-middle">
+      <h4 className="cell large-3 text-center large-text-left">
         {generation !== null && <span>Generation {generation}</span>}
       </h4>
         {renderStatusMessage()}

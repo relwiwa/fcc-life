@@ -23,13 +23,10 @@ class LifeGame extends Component {
     const { instructionsDisplayed } = this.state;
 
     return (
-      <div className="life-game">
-        <h1 className="text-center mt-2">
+      <div className="life-game grid-container grid-container-padded">
+        <h1 className="text-center">
           Life&nbsp;
-          <i
-            className="fa fa-question-circle-o text-muted"
-            onClick={() => this.handleToggleInstructionsDisplay()}
-          ></i>
+          <small className="fa fa-question-circle-o" onClick={() => this.handleToggleInstructionsDisplay()}></small>
         </h1>
         {this.state.instructionsDisplayed &&
           <LifeInstructions

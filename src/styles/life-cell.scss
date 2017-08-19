@@ -1,0 +1,26 @@
+@import './life-game.general.scss';
+
+$colorPopulated:      $colorSecondary;
+$colorNotPopulated:   $colorPrimary;
+$colorCellBorder:     $colorNeutral;
+
+.life-cell.cell {
+  border: 1px solid $colorCellBorder;
+}
+
+.life-cell {
+
+  div {
+    padding-bottom:100%;
+    width:100%;    
+  }
+  
+  .populated {
+    background: $colorPopulated;
+  }
+
+  .not-populated {
+    background: $colorNotPopulated;
+  }
+  
+}

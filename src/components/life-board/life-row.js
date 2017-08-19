@@ -13,9 +13,9 @@ const LifeRow = (props) => {
       result.push(
         <div
           key={'row-' + row + '-col-' + col}
-          className="col"
+          className="cell auto"
         >
-          <div className="row no-gutters">
+          <div className="grid-x">
             {renderLifeCells(cellIndex)}
           </div>
         </div>
@@ -40,7 +40,7 @@ const LifeRow = (props) => {
   } 
 
   return (
-    <div className="life-row row no-gutters">
+    <div className="life-row grid-x">
       {renderLifeRows()}
     </div>
   );

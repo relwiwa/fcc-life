@@ -1,5 +1,6 @@
 import React from 'react';
-import Styles from '../../../styles/style.scss';
+
+import '../../styles/life-cell.scss';
 
 const LifeCell = (props) => {
   const { cellId, onToggleLifeCell, status } = props;
@@ -11,9 +12,9 @@ const LifeCell = (props) => {
   }
 
   return (
-    <div className="col">
+    <div className="life-cell cell auto">
       <div
-        className={'life-cell ' + (status === 1 ? 'bg-info' : 'bg-warning')}
+        className={status === 1 ? 'populated' : 'not-populated'}
         onClick={() => onClick()}
       ></div>
     </div>

@@ -1,7 +1,7 @@
 {
-  "name": "react-without-redux-starter",
+  "name": "fcc-life",
   "version": "1.0.0",
-  "description": "",
+  "description": "Comway's Game of Life implementation for FreeCodeCamp's Certification",
   "main": "index.js",
   "scripts": {
     "build": "npm run clean && webpack -p",
@@ -30,6 +30,7 @@
     "webpack-dev-server": "^2.5.1"
   },
   "dependencies": {
+    "foundation-sites": "6.4.2",
     "react": "^15.6.1",
     "react-dom": "^15.6.1"
   }

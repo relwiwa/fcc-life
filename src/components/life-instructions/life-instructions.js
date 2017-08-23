@@ -62,11 +62,8 @@ class LifeInstructions extends Component {
               </div>
               <div className="cell medium-6">
                 <p>In this implementation you can:</p>
-                <ul>
-                  <li>Watch how random boards evolve</li>
-                  <li>Create your own configuration and see how it evolves</li>
-                  {/*<li>Manipulation is possible by clicking on the cell you want to add or remove from the board</li>*/}
-                  <li>You can pause, {/*manipulate, */}reset and continue the game at any time</li>
+                <ul className="fa-ul">
+                  {instructionsData[0].featureList.map((item, index) => <li><i className="fa-li fa fa-arrow-circle-o-right"></i> {item}</li>)}
                 </ul>
               </div>
             </div>

@@ -9,3 +9,12 @@
 @include foundation-typography;
 @include foundation-visibility-classes;
 @include foundation-xy-grid-classes;
+
+
+/* Font Awesome Global Styles */
+
+.fa-ul {
+  .fa-li {
+    padding-top:2px;
+  }
+}

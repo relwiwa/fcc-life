@@ -2,10 +2,10 @@ const instructionsData = [
   {
     title: "About",
     featureList: [
-      'Watch how random boards evolve',
-      'Create your own configuration and see how it evolves',
+      'Watch how random populations evolve from generation to generation',
+      'Create your own populations and see how it evolves',
       /*<li>Manipulation is possible by clicking on the cell you want to add or remove from the board</li>*/
-      'You can pause, ' + /*manipulate, */ 'reset and continue the game at any time',
+      'You can pause, ' + /*manipulate, */ 'reset and continue the simulation at any time',
     ]
   }, {
     title: "Rules",

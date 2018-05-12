@@ -2,7 +2,7 @@ import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import React, { Component } from 'react';
 
 import LifeInstruction from './life-instruction';
-import TabsContainer from '../../reusable-components/tabs-container/tabs-container';
+import TabsContainer from '../../../../reusable-components/tabs-container/tabs-container';
 
 import instructionsData from './life-instructions-data';
 

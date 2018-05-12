@@ -1,3 +1,4 @@
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import React, { Component } from 'react';
 
 import LifeSimulation from './life-simulation/life-simulation';
@@ -26,7 +27,7 @@ class LifeGame extends Component {
       <div className="life-game grid-container grid-container-padded">
         <h1 className="text-center">
           Life&nbsp;
-          <small className="fa fa-question-circle-o" onClick={() => this.handleToggleInstructionsDisplay()}></small>
+          <small style={{bottom: '12px'}}><FontAwesomeIcon icon="question-circle" onClick={() => this.handleToggleInstructionsDisplay()} /></small>
         </h1>
         {this.state.instructionsDisplayed &&
           <LifeInstructions

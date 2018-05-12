@@ -1,8 +1,8 @@
 import React from 'react';
 
-const LifeControls = (props) => {
-  const { gameStatus, generation, instructionsDisplayed, onContinueGame, onPauseGame, onResetGame, onSetupRandomGame, onStartGame, onToggleInstructionsDisplay, population } = props;
+import IconButton from '../../../../reusable-components/icon-button';
 
+const LifeControls = ({ gameStatus, generation, instructionsDisplayed, onContinueGame, onPauseGame, onResetGame, onSetupRandomGame, onStartGame, onToggleInstructionsDisplay, population }) => {
   const renderStatusMessage = () => {
     return (
       <div className="cell small-10 large-6 small-offset-1 large-offset-0 text-center">
@@ -25,30 +25,36 @@ const LifeControls = (props) => {
   const renderControlButtons = () => {
     return (
      <div className="cell large-3 align-center button-group small">
-        {gameStatus === 'started' &&
-          <button
-              className="button"
-              onClick={onPauseGame}
-            >Pause</button>}
-        {gameStatus === 'paused' &&
-          <button
-            className="button"
-            onClick={onContinueGame}
-          >Continue</button>}
-        {(gameStatus === 'stopped' || gameStatus === 'random-setup' || gameStatus === 'all-dead') &&
-          <button
-            className={'button' + (population === 0 ? ' disabled' : '')}
-            onClick={population === 0 ? null : onStartGame}
-            >Start</button>}
-        {(gameStatus === 'stopped' || gameStatus === 'random-setup' || gameStatus === 'all-dead') &&
-          <button
-            className="button"
-            onClick={onSetupRandomGame}
-            >Random</button>}
-        <button
-            className={'button' + (population === 0 ? ' disabled' : '')}
-            onClick={population === 0 ? null : onResetGame}
-          >Reset</button>
+        {gameStatus === 'started' && <IconButton
+          faIcon="pause"
+          foundationClass="primary"
+          onClick={onPauseGame}
+          text="Pause"
+        />}
+        {gameStatus === 'paused' && <IconButton
+          faIcon="play"
+          foundationClass="primary"
+          onClick={onContinueGame}
+          text="Continue"
+        />}
+        {(gameStatus === 'stopped' || gameStatus === 'random-setup' || gameStatus === 'all-dead') && <IconButton
+          faIcon="play"
+          foundationClass={'primary' + (population === 0 ? ' disabled' : '')}
+          onClick={population === 0 ? null : onStartGame}
+          text="Start"
+        />}
+        {(gameStatus === 'stopped' || gameStatus === 'random-setup' || gameStatus === 'all-dead') && <IconButton
+          faIcon="random"
+          foundationClass="primary"
+          onClick={onSetupRandomGame}
+          text="Random"
+        />}
+        <IconButton
+          faIcon="undo"
+          foundationClass={'primary' + (population === 0 ? ' disabled' : '')}
+          onClick={population === 0 ? null : onResetGame}
+          text="Reset"
+        />
       </div>
     );
   };

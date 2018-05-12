@@ -64,7 +64,7 @@ class LifeInstructions extends Component {
               <div className="cell medium-6">
                 <p>In this implementation you can:</p>
                 <ul className="fa-ul">
-                  {instructionsData[0].featureList.map((item, index) => <li><FontAwesomeIcon icon="arrow-circle-right" listItem /> {item}</li>)}
+                  {instructionsData[0].featureList.map((item, index) => <li key={item.substr(0, 10)}><FontAwesomeIcon icon="arrow-circle-right" listItem /> {item}</li>)}
                 </ul>
               </div>
             </div>

@@ -1,8 +1,8 @@
-@import './life-game.general.scss';
+@import '../../../styles/color-scheme.scss';
 
-$colorPopulated:      $colorSecondary;
-$colorNotPopulated:   $colorPrimary;
-$colorCellBorder:     $colorNeutral;
+$colorPopulated:      $primaryColor;
+$colorNotPopulated:   $secondaryColor;
+$colorCellBorder:     $neutralColor;
 
 .life-cell.cell {
   border: 1px solid $colorCellBorder;

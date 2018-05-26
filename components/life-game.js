@@ -27,17 +27,17 @@ class LifeGame extends Component {
       <div className="life-game grid-container grid-container-padded">
         <h1 className="text-center">
           Life&nbsp;
-          <small style={{bottom: '12px'}}><FontAwesomeIcon icon="question-circle" onClick={() => this.handleToggleInstructionsDisplay()} /></small>
+          <small style={{position: 'relative', bottom: '4px'}}><FontAwesomeIcon icon="question-circle" onClick={() => this.handleToggleInstructionsDisplay()} /></small>
         </h1>
-        {this.state.instructionsDisplayed &&
+        {instructionsDisplayed &&
           <LifeInstructions
             onToggleInstructionsDisplay={() => this.handleToggleInstructionsDisplay()}
           />
         }
-        <LifeSimulation
+        {!instructionsDisplayed && <LifeSimulation
           instructionsDisplayed={instructionsDisplayed}
           onToggleInstructionsDisplay={() => this.handleToggleInstructionsDisplay()}          
-        />
+        />}
       </div>
     );
   }
